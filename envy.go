@@ -20,7 +20,7 @@ func init() {
 	}
 }
 
-// Get args[0] = "Key Name", args[1] = "Default Value", args[3] = "file name or dir location filename".
+// Get args[0] = "Key Name", args[1] = "Default Value", args[2] = "file name or dir location filename".
 func Get(args ...string) string {
 	var key, defaultValue string
 	if len(args) < 1 {
