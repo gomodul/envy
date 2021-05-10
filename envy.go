@@ -49,6 +49,24 @@ func Get(args ...string) string {
 	return defaultValue
 }
 
+// Set godoc.
+func Set(key, value string) error {
+	return os.Setenv(key, value)
+}
+
+// List godoc.
+func List() map[string]string {
+	source := os.Environ()
+	list := make(map[string]string, len(source))
+
+	for _, e := range source {
+		pair := strings.SplitN(e, "=", 2)
+		list[pair[0]] = pair[1]
+	}
+
+	return list
+}
+
 // Load godoc.
 func Load(args ...string) {
 	cwdSplit := make([]string, 0)

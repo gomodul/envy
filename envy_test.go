@@ -18,6 +18,24 @@ func TestGet(t *testing.T) {
 	r.Equal(os.Getenv(GOPATH), envy.Get(GOPATH, "foo"))
 }
 
+func TestSet(t *testing.T) {
+	r := require.New(t)
+
+	before := os.Getenv(envy.Version)
+
+	err := envy.Set(envy.Version, "foo")
+	r.NoError(err)
+
+	after := os.Getenv(envy.Version)
+	r.NotEqual(before, after)
+
+	err = envy.Set(envy.Version, before)
+	r.NoError(err)
+
+	after = os.Getenv(envy.Version)
+	r.Equal(before, after)
+}
+
 func TestCurrentPkgName(t *testing.T) {
 	r := require.New(t)
 
@@ -36,4 +54,14 @@ func TestCurrentFolderName(t *testing.T) {
 	if actual != "envy" {
 		t.Fatalf("expected (envy), got (%v)", actual)
 	}
+}
+
+func TestList(t *testing.T) {
+	r := require.New(t)
+
+	list := envy.List()
+
+	r.NotZero(os.Getenv(GOPATH))
+	r.Equal("", list[envy.Version])
+	r.Equal(os.Getenv(GOPATH), list[GOPATH])
 }
