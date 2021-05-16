@@ -7,9 +7,11 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/gomodul/godotenv"
 	"github.com/rogpeppe/go-internal/modfile"
+	"github.com/spf13/cast"
 )
 
 var splitter = "/"
@@ -40,6 +42,7 @@ func Get(args ...string) string {
 	if len(args) > 2 {
 		fileName = args[2]
 	}
+
 	Load(fileName)
 
 	if value, exists := os.LookupEnv(key); exists {
@@ -49,9 +52,64 @@ func Get(args ...string) string {
 	return defaultValue
 }
 
+// GetBool return bool.
+func GetBool(key string) bool {
+	return cast.ToBool(Get(key))
+}
+
+// GetInt return int.
+func GetInt(key string) int {
+	return cast.ToInt(Get(key))
+}
+
+// GetInt32 return int32.
+func GetInt32(key string) int32 {
+	return cast.ToInt32(Get(key))
+}
+
+// GetInt64 return int64.
+func GetInt64(key string) int64 {
+	return cast.ToInt64(Get(key))
+}
+
+// GetUint return uint.
+func GetUint(key string) uint {
+	return cast.ToUint(Get(key))
+}
+
+// GetUInt32 return uint32.
+func GetUInt32(key string) uint32 {
+	return cast.ToUint32(Get(key))
+}
+
+// GetUInt64 return uint64.
+func GetUInt64(key string) uint64 {
+	return cast.ToUint64(Get(key))
+}
+
+// GetTime return time.Time
+func GetTime(key string) time.Time {
+	return cast.ToTime(Get(key))
+}
+
+// GetDuration return time.Duration
+func GetDuration(key string) time.Duration {
+	return cast.ToDuration(Get(key))
+}
+
 // Set godoc.
 func Set(key, value string) error {
 	return os.Setenv(key, value)
+}
+
+// Del unset env.
+func Del(key string) error {
+	return os.Unsetenv(key)
+}
+
+// Flush clear all env
+func Flush() {
+	os.Clearenv()
 }
 
 // List godoc.
