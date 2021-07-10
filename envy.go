@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gomodul/godotenv"
+	"github.com/joho/godotenv"
 	"github.com/rogpeppe/go-internal/modfile"
 	"github.com/spf13/cast"
 )
@@ -53,48 +53,48 @@ func Get(args ...string) string {
 }
 
 // GetBool return bool.
-func GetBool(key string) bool {
-	return cast.ToBool(Get(key))
+func GetBool(key ...string) bool {
+	return cast.ToBool(Get(key...))
 }
 
 // GetInt return int.
-func GetInt(key string) int {
-	return cast.ToInt(Get(key))
+func GetInt(key ...string) int {
+	return cast.ToInt(Get(key...))
 }
 
 // GetInt32 return int32.
-func GetInt32(key string) int32 {
-	return cast.ToInt32(Get(key))
+func GetInt32(key ...string) int32 {
+	return cast.ToInt32(Get(key...))
 }
 
 // GetInt64 return int64.
-func GetInt64(key string) int64 {
-	return cast.ToInt64(Get(key))
+func GetInt64(key ...string) int64 {
+	return cast.ToInt64(Get(key...))
 }
 
 // GetUint return uint.
-func GetUint(key string) uint {
-	return cast.ToUint(Get(key))
+func GetUint(key ...string) uint {
+	return cast.ToUint(Get(key...))
 }
 
 // GetUInt32 return uint32.
-func GetUInt32(key string) uint32 {
-	return cast.ToUint32(Get(key))
+func GetUInt32(key ...string) uint32 {
+	return cast.ToUint32(Get(key...))
 }
 
 // GetUInt64 return uint64.
-func GetUInt64(key string) uint64 {
-	return cast.ToUint64(Get(key))
+func GetUInt64(key ...string) uint64 {
+	return cast.ToUint64(Get(key...))
 }
 
 // GetTime return time.Time
-func GetTime(key string) time.Time {
-	return cast.ToTime(Get(key))
+func GetTime(key ...string) time.Time {
+	return cast.ToTime(Get(key...))
 }
 
 // GetDuration return time.Duration
-func GetDuration(key string) time.Duration {
-	return cast.ToDuration(Get(key))
+func GetDuration(key ...string) time.Duration {
+	return cast.ToDuration(Get(key...))
 }
 
 // Set godoc.
