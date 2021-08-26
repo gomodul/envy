@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/joho/godotenv"
+	"github.com/gomodul/godotenv"
 	"github.com/rogpeppe/go-internal/modfile"
 	"github.com/spf13/cast"
 )
@@ -24,16 +24,11 @@ func init() {
 
 // Get args[0] = "Key Name", args[1] = "Default Value", args[2] = "file name or dir location filename".
 func Get(args ...string) string {
-	var key, defaultValue string
 	if len(args) < 1 {
 		return ""
 	}
 
-	key = args[0]
-	if len(args) > 1 {
-		defaultValue = args[1]
-	}
-
+	key := args[0]
 	if value, exists := os.LookupEnv(key); exists {
 		return value
 	}
@@ -49,6 +44,10 @@ func Get(args ...string) string {
 		return value
 	}
 
+	var defaultValue string
+	if len(args) > 1 {
+		defaultValue = args[1]
+	}
 	return defaultValue
 }
 
@@ -135,12 +134,13 @@ func Load(args ...string) {
 		log.Println("just need 1 arg")
 	}
 
-	if len(args) > 0 {
-		arg := args[0]
-		if len(arg) > 0 {
-			cwdSplit = strings.Split(arg, "\\")
-			cwdSplit = strings.Split(strings.Join(cwdSplit, splitter), splitter)
+	if len(args) > 0 && len(args[0]) > 0 {
+		if strings.Index(args[0], "\\") > -1 {
+			cwdSplit = strings.Split(args[0], "\\")
+		} else {
+			cwdSplit = strings.Split(args[0], "/")
 		}
+		cwdSplit = strings.Split(strings.Join(cwdSplit, splitter), splitter)
 	}
 
 	if len(cwdSplit) > 0 {
@@ -224,21 +224,6 @@ func CurrentPkgName() string {
 	}
 
 	return packagePath
-}
-
-// CurrentFolderName godoc.
-func CurrentFolderName() string {
-	pkgName := CurrentPkgName()
-	if pkgName == "" {
-		return ""
-	}
-
-	pkgNamrArr := strings.Split(pkgName, splitter)
-	if len(pkgNamrArr) > 0 {
-		return pkgNamrArr[len(pkgNamrArr)-1]
-	}
-
-	return ""
 }
 
 func currentPackage() string {
