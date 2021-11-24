@@ -124,16 +124,26 @@ func List() map[string]string {
 	return list
 }
 
+// Stage get stage from GO_ENV or APP_ENV or ENV
+func Stage() string {
+	for _, v := range []string{"GO_ENV", "APP_ENV", "ENV"} {
+		if value, exist := os.LookupEnv(v); exist {
+			return strings.TrimSpace(value)
+		}
+	}
+	return ""
+}
+
 // Load godoc.
 func Load(args ...string) {
 	cwdSplit := make([]string, 0)
 	cwdSplitLength := 0
-	fileName := ".env"
 
 	if len(args) > 1 {
 		log.Println("just need 1 arg")
 	}
 
+	var fileName string
 	if len(args) > 0 && len(args[0]) > 0 {
 		if strings.Index(args[0], "\\") > -1 {
 			cwdSplit = strings.Split(args[0], "\\")
@@ -141,6 +151,11 @@ func Load(args ...string) {
 			cwdSplit = strings.Split(args[0], "/")
 		}
 		cwdSplit = strings.Split(strings.Join(cwdSplit, splitter), splitter)
+	} else {
+		fileName = ".env"
+		if stage := Stage(); stage != "" {
+			fileName += "." + strings.ToLower(stage)
+		}
 	}
 
 	if len(cwdSplit) > 0 {

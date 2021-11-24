@@ -40,20 +40,12 @@ func TestCurrentPkgName(t *testing.T) {
 	r := require.New(t)
 
 	r.Equal("github.com/gomodul/envy", envy.CurrentPkgName())
-	r.Equal("envy", envy.CurrentFolderName())
 }
 
 func TestGoPath(t *testing.T) {
 	r := require.New(t)
 
 	r.Equal(os.Getenv("GOPATH"), envy.GoPath())
-}
-
-func TestCurrentFolderName(t *testing.T) {
-	actual := envy.CurrentFolderName()
-	if actual != "envy" {
-		t.Fatalf("expected (envy), got (%v)", actual)
-	}
 }
 
 func TestList(t *testing.T) {
@@ -64,4 +56,41 @@ func TestList(t *testing.T) {
 	r.NotZero(os.Getenv(GOPATH))
 	r.Equal("", list[envy.Version])
 	r.Equal(os.Getenv(GOPATH), list[GOPATH])
+}
+
+func TestStage(t *testing.T) {
+	key := "ENV"
+	stage := envy.Get(key)
+
+	var err error
+
+	tests := []struct {
+		name string
+		env  string
+		want string
+	}{
+		{
+			name: "should have stage dev",
+			env:  "dev  ",
+			want: "dev",
+		},
+		{
+			name: "should have empty stage",
+			env:  "",
+			want: "",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err = envy.Set(key, tt.env)
+			require.NoError(t, err)
+
+			if got := envy.Stage(); got != tt.want {
+				t.Errorf("Stage() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+
+	err = envy.Set(key, stage)
+	require.NoError(t, err)
 }
